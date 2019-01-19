@@ -53,14 +53,14 @@ buildInitialState = do
         Just ne -> pure $ TuiState $ makeNonEmptyCursor ne
 
 makeGreedy :: Widget a -> Widget a
-makeGreedy w = w { vSize = Greedy, hSize = Greedy }
+makeGreedy w = padLeft Max $ padRight Max $ padTop Max $ padBottom Max $ w 
 
 drawTui :: TuiState -> [Widget ResourceName]
 drawTui ts = 
     let nec = tuiStatePaths ts
      in [ makeGreedy $ border $ vBox 
-            [ border $ vBox $ [ drawPath True "Hello World" ]
-            , border $ vBox $ concat 
+            [ border $ hCenter $ vBox $ [ drawPath True "Hello World" ]
+            , border $ center $ vBox $ concat 
                   [ map (drawPath False) $ reverse $ nonEmptyCursorPrev nec
                   , pure $ drawPath True $ nonEmptyCursorCurrent nec
                   , map (drawPath False) $ nonEmptyCursorNext nec
